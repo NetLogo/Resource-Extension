@@ -28,7 +28,7 @@ object AddResource extends Command {
     }
 
     else
-      println(s"File ${args(1).getString} does not existn") // make this show an error dialog
+      println(s"File ${args(1).getString} does not exist.") // make this show an error dialog
   }
 }
 
