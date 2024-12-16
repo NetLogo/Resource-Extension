@@ -2,33 +2,16 @@ package org.nlogo.extensions.resource
 
 import java.io.File
 
-import org.nlogo.api.{ Argument, Command, Context, DefaultClassManager, ExternalResourceManager, PrimitiveManager,
-                       Reporter }
-import org.nlogo.core.{ ExternalResource, Syntax }
+import org.nlogo.api.{ Argument, Context, DefaultClassManager, ExternalResourceManager, PrimitiveManager, Reporter }
+import org.nlogo.core.{ ExternalResource, I18N, Syntax }
+import org.nlogo.swing.OptionDialog
+import org.nlogo.window.GUIWorkspace
 
 import scala.io.Source
 
 class ResourceExtension extends DefaultClassManager {
   def load(manager: PrimitiveManager) {
-    manager.addPrimitive("add-resource", AddResource)
     manager.addPrimitive("get-resource", GetResource)
-    manager.addPrimitive("clear-resources", ClearResources)
-  }
-}
-
-object AddResource extends Command {
-  override def getSyntax: Syntax =
-    Syntax.commandSyntax(right = List(Syntax.StringType, Syntax.StringType))
-
-  def perform(args: Array[Argument], context: Context) {
-    if (new File(args(1).getString).isFile) {
-      val data = Source.fromFile(args(1).getString).getLines.mkString("\n")
-
-      context.workspace.getResourceManager.addResource(ExternalResource(args(0).getString, data))
-    }
-
-    else
-      println(s"File ${args(1).getString} does not exist.") // make this show an error dialog
   }
 }
 
@@ -41,17 +24,17 @@ object GetResource extends Reporter {
       case Some(data) =>
         data
       case None =>
-        println(s"Resource ${args(0).getString} does not exist.") // make this show an error dialog
+        context.workspace match {
+          case gw: GUIWorkspace =>
+            // change this to org.nlogo.swing.OptionPane after integrating new GUI
+            OptionDialog.showMessage(gw.getFrame, I18N.gui.get("common.messages.error"),
+                                     I18N.gui.getN("resource.noResource", args(0).getString),
+                                     Array(I18N.gui.get("common.buttons.ok")))
+          case _ =>
+            println(I18N.gui.getN("resource.noResource", args(0).getString))
+        }
+
         ""
     }
-  }
-}
-
-object ClearResources extends Command {
-  override def getSyntax: Syntax =
-    Syntax.commandSyntax(right = List())
-
-  def perform(args: Array[Argument], context: Context) {
-    context.workspace.getResourceManager.setResources(Seq())
   }
 }

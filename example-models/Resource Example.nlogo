@@ -1,35 +1,39 @@
-<?xml version="1.0" encoding="utf-8"?><model version="NetLogo 6.4.0" snapToGrid="true"><code><![CDATA[extensions [ pathdir resource ]
+<?xml version="1.0" encoding="utf-8"?><model version="NetLogo 6.4.0" snapToGrid="true"><code><![CDATA[extensions [ resource ]
 
-to add
-  resource:add-resource "test" word pathdir:get-model-path "/test.txt"
+to get-bad
+  print resource:get-resource "hello"
 end
+]]></code><widgets><view x="210" maxPycor="16" updateMode="0" wrappingAllowedX="true" y="10" frameRate="30.0" minPycor="-16" height="438" showTickCounter="true" patchSize="13.0" fontSize="10" wrappingAllowedY="true" width="437" tickCounterLabel="ticks" maxPxcor="16" minPxcor="-16"></view><button x="10" y="10" height="33" disableUntilTicks="false" forever="false" kind="Observer" width="75"><source><![CDATA[get-bad]]></source></button></widgets><info><![CDATA[## WHAT IS IT?
 
-to add-wrong
-  resource:add-resource "test2" word pathdir:get-model-path "/test2.txt"
-end
+(a general understanding of what the model is trying to show or explain)
 
-to get
-  print resource:get-resource "test"
-end
+## HOW IT WORKS
 
-to get-wrong
-  print resource:get-resource "test2"
-end
-
-to reset
-  resource:clear-resources
-end
-]]></code><widgets><view maxPycor="16" updateMode="0" wrappingAllowedX="true" bottom="448" frameRate="30.0" left="210" minPycor="-16" showTickCounter="true" patchSize="13.0" fontSize="10" wrappingAllowedY="true" top="10" right="647" tickCounterLabel="ticks" maxPxcor="16" minPxcor="-16"></view><button bottom="43" left="10" disableUntilTicks="false" forever="false" kind="Observer" top="10" right="73"><source><![CDATA[add]]></source></button><button bottom="88" left="10" disableUntilTicks="false" forever="false" kind="Observer" top="55" right="73"><source><![CDATA[get]]></source></button><button bottom="88" left="85" disableUntilTicks="false" forever="false" kind="Observer" top="55" right="174"><source><![CDATA[get-wrong]]></source></button><button bottom="43" left="85" disableUntilTicks="false" forever="false" kind="Observer" top="10" right="177"><source><![CDATA[add-wrong]]></source></button><button bottom="133" left="10" disableUntilTicks="false" forever="false" kind="Observer" top="100" right="73"><source><![CDATA[reset]]></source></button></widgets><info><![CDATA[## WHAT IS IT?
-
-This model provides a simple example for how to use the resource extension to store external file data in a NetLogo model.
+(what rules the agents use to create the overall behavior of the model)
 
 ## HOW TO USE IT
 
-First, make sure you have a file named "test.txt" in the same directory as your model. Then, click the "add" button in the Interface Tab. This will store the contents of "test.txt" in the model. If you click the "get" button, you will see the contents of "test.txt" appear in the Command Center! Notice that clicking either add-wrong or get-wrong will fail, since they reference a file called "test2.txt", which does not exist. Also, clicking "reset" will clear all resources stored in the model.
+(how to use the model, including a description of each of the items in the Interface tab)
+
+## THINGS TO NOTICE
+
+(suggested things for the user to notice while running the model)
+
+## THINGS TO TRY
+
+(suggested things for the user to try to do (move sliders, switches, etc.) with the model)
 
 ## EXTENDING THE MODEL
 
-Try editing the add-resource and get-resource commands in the Code Tab to add more of your own data. You can use any kind of file, it doesn't have to be a text file!
+(suggested things to add or change in the Code tab to make the model more complicated, detailed, accurate, etc.)
+
+## NETLOGO FEATURES
+
+(interesting or unusual features of NetLogo that the model uses, particularly in the Code tab; or where workarounds were needed for missing features)
+
+## RELATED MODELS
+
+(models in the NetLogo Models Library and elsewhere which are of related interest)
 
 ## CREDITS AND REFERENCES
 
