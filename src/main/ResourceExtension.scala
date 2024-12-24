@@ -11,7 +11,8 @@ import scala.io.Source
 
 class ResourceExtension extends DefaultClassManager {
   def load(manager: PrimitiveManager) {
-    manager.addPrimitive("get", Get)
+    manager.addPrimitive( "get", Get)
+    manager.addPrimitive("list", ListPrim)
   }
 }
 
@@ -37,4 +38,15 @@ object Get extends Reporter {
         ""
     }
   }
+}
+
+object ListPrim extends Reporter {
+
+  override def getSyntax: Syntax = Syntax.reporterSyntax(ret = Syntax.ListType)
+
+  override def report(args: Array[Argument], context: Context): LogoList = {
+    val names = context.workspace.getResourceManager.getResources.map(_.name)
+    LogoList(names: _*)
+  }
+
 }
