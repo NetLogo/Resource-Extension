@@ -10,7 +10,7 @@ import org.nlogo.window.GUIWorkspace
 import scala.io.Source
 
 class ResourceExtension extends DefaultClassManager {
-  def load(manager: PrimitiveManager) {
+  def load(manager: PrimitiveManager): Unit = {
     manager.addPrimitive( "get", Get)
     manager.addPrimitive("list", ListPrim)
   }
