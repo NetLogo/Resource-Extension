@@ -46,7 +46,7 @@ object ListPrim extends Reporter {
 
   override def report(args: Array[Argument], context: Context): LogoList = {
     val names = context.workspace.getResourceManager.getResources.map(_.name)
-    LogoList(names: _*)
+    LogoList(names*)
   }
 
 }
