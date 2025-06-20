@@ -1,10 +1,11 @@
 package org.nlogo.extensions.resource
 
+import java.awt.EventQueue
 import java.io.File
 
 import org.nlogo.api.{ Argument, Context, DefaultClassManager, ExternalResourceManager, PrimitiveManager, Reporter }
 import org.nlogo.core.{ ExternalResource, I18N, LogoList, Syntax }
-import org.nlogo.swing.OptionDialog
+import org.nlogo.swing.OptionPane
 import org.nlogo.window.GUIWorkspace
 
 import scala.io.Source
@@ -27,10 +28,19 @@ object Get extends Reporter {
       case None =>
         context.workspace match {
           case gw: GUIWorkspace =>
-            // change this to org.nlogo.swing.OptionPane after integrating new GUI
-            OptionDialog.showMessage(gw.getFrame, I18N.gui.get("common.messages.error"),
-                                     I18N.gui.getN("resource.noResource", args(0).getString),
-                                     Array(I18N.gui.get("common.buttons.ok")))
+            if (EventQueue.isDispatchThread) {
+              new OptionPane(gw.getFrame, I18N.gui.get("common.messages.error"),
+                             I18N.gui.getN("resource.noResource", args(0).getString), OptionPane.Options.Ok,
+                             OptionPane.Icons.Error)
+            } else {
+              // ideally we would block here, but invokeAndWait causes the app to
+              // freeze in certain contexts (Isaac B 6/20/25)
+              EventQueue.invokeLater(() => {
+                new OptionPane(gw.getFrame, I18N.gui.get("common.messages.error"),
+                               I18N.gui.getN("resource.noResource", args(0).getString), OptionPane.Options.Ok,
+                               OptionPane.Icons.Error)
+              })
+            }
           case _ =>
             println(I18N.gui.getN("resource.noResource", args(0).getString))
         }
