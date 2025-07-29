@@ -3,10 +3,10 @@ package org.nlogo.extensions.resource
 import java.awt.EventQueue
 import java.io.File
 
-import org.nlogo.api.{ Argument, Context, DefaultClassManager, ExternalResourceManager, PrimitiveManager, Reporter }
+import org.nlogo.api.{ Argument, Context, DefaultClassManager, ExtensionException, ExternalResourceManager,
+                       PrimitiveManager, Reporter }
 import org.nlogo.core.{ ExternalResource, I18N, LogoList, Syntax }
-import org.nlogo.swing.OptionPane
-import org.nlogo.window.GUIWorkspace
+import org.nlogo.workspace.AbstractWorkspace
 
 import scala.io.Source
 
@@ -27,25 +27,13 @@ object Get extends Reporter {
         resource.data
       case None =>
         context.workspace match {
-          case gw: GUIWorkspace =>
-            if (EventQueue.isDispatchThread) {
-              new OptionPane(gw.getFrame, I18N.gui.get("common.messages.error"),
-                             I18N.gui.getN("resource.noResource", args(0).getString), OptionPane.Options.Ok,
-                             OptionPane.Icons.Error)
-            } else {
-              // ideally we would block here, but invokeAndWait causes the app to
-              // freeze in certain contexts (Isaac B 6/20/25)
-              EventQueue.invokeLater(() => {
-                new OptionPane(gw.getFrame, I18N.gui.get("common.messages.error"),
-                               I18N.gui.getN("resource.noResource", args(0).getString), OptionPane.Options.Ok,
-                               OptionPane.Icons.Error)
-              })
-            }
-          case _ =>
-            println(I18N.gui.getN("resource.noResource", args(0).getString))
-        }
+          case aw: AbstractWorkspace if !aw.isHeadless =>
+            throw new ExtensionException(I18N.gui.getN("resource.noResource", args(0).getString))
 
-        ""
+          // I18N can't be used in headless, so default to the English message (Isaac B 7/29/25)
+          case _ =>
+            throw new ExtensionException(s"Resource \"${args(0).getString}\" does not exist")
+        }
     }
   }
 }
