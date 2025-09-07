@@ -26,13 +26,11 @@ object Get extends Reporter {
       case Some(resource) =>
         resource.data
       case None =>
-        context.workspace match {
-          case aw: AbstractWorkspace if !aw.isHeadless =>
-            throw new ExtensionException(I18N.gui.getN("resource.noResource", args(0).getString))
-
+        if (context.workspace.workspaceContext.appGUI) {
+          throw new ExtensionException(I18N.gui.getN("resource.noResource", args(0).getString))
+        } else {
           // I18N can't be used in headless, so default to the English message (Isaac B 7/29/25)
-          case _ =>
-            throw new ExtensionException(s"Resource \"${args(0).getString}\" does not exist")
+          throw new ExtensionException(s"Resource \"${args(0).getString}\" does not exist")
         }
     }
   }
