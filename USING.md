@@ -7,7 +7,7 @@ which were added in NetLogo 7, provide a way to use the contents of other files 
 files alongside the model. When you add a resource to a model, the contents of the source file are stored in the model
 file.
 
-For details on bundled resources, see [Resource Manager](resource-manager.html).
+For details on bundled resources, see [Resource Manager](/resource-manager).
 
 ### Getting Started
 
